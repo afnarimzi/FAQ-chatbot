@@ -1,8 +1,8 @@
-#FAQ Chatbot
+# FAQ Chatbot
 
 A simple FAQ Chatbot built using Flask and Natural Language Processing (NLP) to answer frequently asked questions. It includes both a backend and a frontend for user interaction.
 
-##Features
+## Features
 
 User-friendly chat interface (Frontend: HTML, CSS, JavaScript)
 
@@ -12,7 +12,7 @@ NLP processing for understanding questions
 
 Customizable FAQ knowledge base
 
-##Usage
+## Usage
 
 Open the chatbot in your browser.
 

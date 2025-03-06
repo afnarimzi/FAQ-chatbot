@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <title>Chatbot</title>
+        <link rel="stylesheet" type="text/css" href="../static/chatbot.css">
+
+
+    </head>
+    <body>
+        <div class="Form-border">
+            <h1>Timeless Trends</h1>
+            
+            <!-- Chat With Us Box -->
+            <div class="chat-box">Chat With Us</div>
+
+            <!-- Chatbot Box -->
+            <div class="chat-box2">
+                STICHY
+                <hr> 
+                <div id="chat-messages"></div>
+                
+                <form onsubmit="event.preventDefault(); sendMessage();">
+                    <div class="input-container">
+                        <input type="text" id="user-input" placeholder="Ask me....">
+                        <button type="submit">Send</button> 
+                    </div>
+                </form> 
+            </div>   
+        </div>
+
+        <script>
+            function sendMessage() {
+                let userInput = document.getElementById("user-input").value.trim();
+                let chatMessages = document.getElementById("chat-messages");
+
+                if (userInput === "") return;
+
+                // Display user message
+                let userMessage = document.createElement("div");
+                userMessage.innerHTML = `<b>You:</b> ${userInput}`;
+                userMessage.classList.add("message", "user-message");
+                chatMessages.appendChild(userMessage);
+
+                // Scroll to the latest message (only if messages exist)
+                if (chatMessages.lastElementChild) {
+                    chatMessages.lastElementChild.scrollIntoView({ behavior: "smooth" });
+                }
+
+                // Send user input to Flask backend
+                fetch("/get_response", {
+                    method: "POST",
+                    body: JSON.stringify({ message: userInput }),
+                    headers: { "Content-Type": "application/json" }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Display chatbot response
+                    let botMessage = document.createElement("div");
+                    botMessage.innerHTML = `<b>Bot:</b> ${data.response}`;
+                    botMessage.classList.add("message", "bot-message");
+                    chatMessages.appendChild(botMessage);
+
+                    // Scroll to the latest message
+                    if (chatMessages.lastElementChild) {
+                        chatMessages.lastElementChild.scrollIntoView({ behavior: "smooth" });
+                    }
+
+                    document.getElementById("user-input").value = "";  // Clear input field
+                })
+                .catch(error => console.error("Error:", error));
+            }
+        </script>
+    </body>
+</html>
